@@ -15,7 +15,7 @@ class Database {
     try {
       await this.pool.query(`
         CREATE TABLE IF NOT EXISTS categories (
-          id SERIAL PRIMARY KEY,
+          id SERIAL PRIMARY KEY,    
           name TEXT NOT NULL,
           slug TEXT NOT NULL UNIQUE,
           image TEXT,

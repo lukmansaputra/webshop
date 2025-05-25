@@ -23,13 +23,13 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-function formatSlug(slug) {
-  return slug
-    .replace(/-/g, " ") // Ganti - dengan spasi
-    .split(" ") // Pisah kata-kata
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1)) // Kapital huruf pertama
-    .join(" "); // Gabung kembali
-}
+// function formatSlug(slug) {
+//   return slug
+//     .replace(/-/g, " ") // Ganti - dengan spasi
+//     .split(" ") // Pisah kata-kata
+//     .map((word) => word.charAt(0).toUpperCase() + word.slice(1)) // Kapital huruf pertama
+//     .join(" "); // Gabung kembali
+// }
 
 const mainRouter = require("./App/routes/main");
 app.use("/", mainRouter);
