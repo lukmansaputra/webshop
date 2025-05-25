@@ -9,6 +9,8 @@ const mainRouter = require("./App/routes/main.js");
 
 const app = express();
 
+const port = process.env.PORT || 8080;
+
 app.use(expressLayouts);
 app.set("view engine", "ejs");
 app.set("layout", "layouts/layout");
@@ -19,6 +21,6 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use("/", mainRouter);
 
-// ✅ Export sebagai serverless function
-module.exports = app;
-module.exports.handler = serverless(app);
+app.listen(port, () => {
+  console.log("server started");
+});
