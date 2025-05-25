@@ -4,6 +4,8 @@ const app = express();
 const path = require("path");
 const db = require("./App/database");
 
+const port = process.env.PORT || 8080;
+
 // Gunakan EJS Layouts
 app.use(expressLayouts);
 
