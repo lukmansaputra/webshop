@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html class="scroll-smooth h-full">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css" rel="stylesheet" />
+    <style>
+      #description [style*="background-color"] {
+        background-color: transparent !important;
+      }
+      #description ul {
+        list-style-type: disc;
+        padding-left: 1.25rem;
+      }
+      #description ol {
+        list-style-type: decimal;
+        padding-left: 1.25rem;
+      }
+      #description li {
+        margin-bottom: 0.5rem;
+      }
+    </style>
+  </head>
+
+  <!-- Tambahkan layout full-height dengan flex -->
+  <body class="bg-gray-100 dark:bg-gray-700 min-h-screen flex flex-col">
+
+    <% if (typeof hideNavbar === 'undefined' || !hideNavbar) { %>
+      <%- include("../components/navbar") %>
+    <% } %>
+
+    <!-- Konten fleksibel -->
+    <main class="flex-grow">
+      <div class="mx-auto">
+        <%- body %>
+      </div>
+    </main>
+
+    <!-- Footer yang selalu di bawah -->
+    <footer class="bg-gray-900 text-gray-300">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 grid grid-cols-1 md:grid-cols-4 gap-8">
+    <!-- Tentang Toko -->
+    <div>
+      <h3 class="text-lg font-semibold mb-4 text-white">Tentang Kami</h3>
+      <p class="text-sm">
+        Toko Online terpercaya yang menyediakan berbagai produk kebutuhan Anda dengan harga terjangkau dan kualitas terbaik.
+      </p>
+    </div>
+
+    <!-- Navigasi -->
+    <div>
+      <h3 class="text-lg font-semibold mb-4 text-white">Navigasi</h3>
+      <ul class="space-y-2 text-sm">
+        <li><a href="#" class="hover:underline">Beranda</a></li>
+        <li><a href="#" class="hover:underline">Produk</a></li>
+        <li><a href="#" class="hover:underline">Promo</a></li>
+        <li><a href="#" class="hover:underline">Kontak</a></li>
+      </ul>
+    </div>
+
+    <!-- Kontak -->
+    <div>
+      <h3 class="text-lg font-semibold mb-4 text-white">Kontak</h3>
+      <ul class="text-sm space-y-2">
+        <li>📍 Jakarta, Indonesia</li>
+        <li>📞 +62 812-3456-7890</li>
+        <li>✉️ support@tokoonline.com</li>
+      </ul>
+    </div>
+
+    <!-- Sosial Media -->
+    <div>
+      <h3 class="text-lg font-semibold mb-4 text-white">Ikuti Kami</h3>
+      <div class="flex space-x-4">
+        <a href="#" class="hover:text-white">🌐 Facebook</a>
+        <a href="#" class="hover:text-white">📷 Instagram</a>
+        <a href="#" class="hover:text-white">🐦 Twitter</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Copyright -->
+  <div class="border-t border-gray-700 text-center text-sm py-4">
+    &copy; 2025 Toko Online. Semua hak dilindungi.
+  </div>
+</footer>
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
+    <script src="https://unpkg.com/taos@1.0.5/dist/taos.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        initTAOS();
+      });
+      const button = document.getElementById("mega-menu-icons-dropdown-button");
+      const menu = document.getElementById("mega-menu-icons-dropdown");
+      button?.addEventListener("click", () => {
+        menu?.classList.toggle("hidden");
+      });
+    </script>
+  </body>
+</html>

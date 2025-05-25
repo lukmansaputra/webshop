@@ -1,0 +1,17 @@
+<!-- Include the Quill library -->
+<script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
+
+<!-- Initialize Quill editor -->
+<script>
+  const quill = new Quill("#editor", {
+    modules: {
+      toolbar: [
+        [{ header: [false] }],
+        ["bold", "italic", "underline"],
+        [{ list: "ordered" }, { list: "bullet" }, { list: "check" }],
+      ],
+    },
+    placeholder: "Product Description.....",
+    theme: "snow", // or 'bubble'
+  });
+</script>

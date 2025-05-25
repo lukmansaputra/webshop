@@ -1,0 +1,105 @@
+<div class="mb-4">
+    
+  <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Upload Images</label>
+  <input type="file" id="imageInput" multiple accept="image/*" class="hidden" />
+  
+  <!-- Preview Container -->
+  <div id="previewContainer" class="flex flex-wrap gap-3 mb-2"></div>
+  
+  <!-- Trigger Button -->
+  <button type="button" id="addImageBtn"
+          class="text-sm px-3 py-1 border border-gray-300 rounded hover:bg-gray-100">
+    + Add Image
+  </button>
+</div>
+
+<script>
+  const maxImages = 5;
+  let selectedFiles = [];
+  let existingImages = <%- JSON.stringify(images || []) %>; // array of URLs
+
+  const imageInput = document.getElementById("imageInput");
+  const previewContainer = document.getElementById("previewContainer");
+  const addImageBtn = document.getElementById("addImageBtn");
+
+  // Trigger file input
+  addImageBtn.addEventListener("click", () => {
+    if (selectedFiles.length + existingImages.length >= maxImages) {
+      alert(`Max ${maxImages} images allowed.`);
+      return;
+    }
+    imageInput.click();
+  });
+
+  // Handle input change
+  imageInput.addEventListener("change", (e) => {
+    const files = Array.from(e.target.files);
+    const remaining = maxImages - selectedFiles.length - existingImages.length;
+    const toAdd = files.slice(0, remaining);
+
+    selectedFiles = [...selectedFiles, ...toAdd];
+    updatePreview();
+  });
+
+  // Render previews
+  function updatePreview() {
+    previewContainer.innerHTML = "";
+
+    // Preview existing images (from server)
+    existingImages.forEach((url, index) => {
+      const wrapper = createImageWrapper(url, true, index);
+      previewContainer.appendChild(wrapper);
+    });
+
+    // Preview new selected images (from input)
+    selectedFiles.forEach((file, index) => {
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        const wrapper = createImageWrapper(e.target.result, false, index);
+        previewContainer.appendChild(wrapper);
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+
+  // Create preview element
+  function createImageWrapper(src, isExisting, index) {
+    const wrapper = document.createElement("div");
+    wrapper.className = "relative w-24 h-24";
+
+    const img = document.createElement("img");
+    img.src = src;
+    img.className = "object-cover w-full h-full rounded";
+
+    const closeBtn = document.createElement("button");
+    closeBtn.innerText = "×";
+    closeBtn.className =
+      "absolute top-0 right-0 bg-red-600 text-white rounded-full w-5 h-5 text-xs flex items-center justify-center hover:bg-red-700";
+    closeBtn.addEventListener("click", () => {
+      if (isExisting) {
+        existingImages.splice(index, 1);
+      } else {
+        selectedFiles.splice(index, 1);
+      }
+      updatePreview();
+    });
+
+    // Hidden input for existing image
+    if (isExisting) {
+      const hiddenInput = document.createElement("input");
+      hiddenInput.type = "hidden";
+      hiddenInput.name = "existing_images[]";
+      hiddenInput.value = src;
+      wrapper.appendChild(hiddenInput);
+    }
+
+    wrapper.appendChild(img);
+    wrapper.appendChild(closeBtn);
+    return wrapper;
+  }
+
+  // Initialize preview on page load
+  document.addEventListener("DOMContentLoaded", () => {
+    updatePreview();
+  });
+</script>

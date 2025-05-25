@@ -1,0 +1,73 @@
+<br>
+<h3 class="text-lg py-2 mb-3">Images Product</h3>
+<div class="mb-4">
+  <input type="file" id="imageInput" multiple accept="image/*"
+         class="hidden" />
+  <div id="imagePreviewContainer" class="flex flex-wrap gap-2"></div>
+  <button type="button" id="addImageBtn"
+          class="mt-2 text-sm px-3 py-1 border border-gray-300 rounded hover:bg-gray-100">
+    + Add Image
+  </button>
+</div>
+
+<script>
+  const maxImages = 5;
+  let selectedFiles = [];
+
+  const imageInput = document.getElementById("imageInput");
+  const previewContainer = document.getElementById("imagePreviewContainer");
+  const addImageBtn = document.getElementById("addImageBtn");
+
+  // Trigger input
+  addImageBtn.addEventListener("click", () => {
+    if (selectedFiles.length >= maxImages) {
+      alert(`Max ${maxImages} images allowed.`);
+      return;
+    }
+    imageInput.click();
+  });
+
+  imageInput.addEventListener("change", (e) => {
+    const files = Array.from(e.target.files);
+
+    const remaining = maxImages - selectedFiles.length;
+    const toAdd = files.slice(0, remaining);
+
+    selectedFiles = [...selectedFiles, ...toAdd];
+    updatePreview();
+  });
+
+  function updatePreview() {
+    previewContainer.innerHTML = "";
+
+    selectedFiles.forEach((file, index) => {
+      const reader = new FileReader();
+
+      reader.onload = function (e) {
+        const wrapper = document.createElement("div");
+        wrapper.className = "relative w-24 h-24";
+
+        const img = document.createElement("img");
+        img.src = e.target.result;
+        img.className = "object-cover w-full h-full rounded";
+
+        const removeBtn = document.createElement("button");
+        removeBtn.innerText = "×";
+        removeBtn.className =
+          "absolute top-0 right-0 bg-red-600 text-white rounded-full w-5 h-5 text-xs flex items-center justify-center hover:bg-red-700";
+        removeBtn.addEventListener("click", () => {
+          selectedFiles.splice(index, 1);
+          updatePreview();
+        });
+
+        wrapper.appendChild(img);
+        wrapper.appendChild(removeBtn);
+        previewContainer.appendChild(wrapper);
+      };
+
+      reader.readAsDataURL(file);
+    });
+  }
+
+  // Gunakan selectedFiles saat submit untuk append ke FormData
+</script>

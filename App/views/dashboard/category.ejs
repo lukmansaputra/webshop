@@ -1,0 +1,138 @@
+
+<div class="min-h-screen flex">
+    <%- include("../components/sidebar-dashboard") %>
+     <%- include("../components/topbar-dashboard") %>
+<!-- Modal toggle -->
+ <div class="px-10 py-10 mx-auto">
+
+   <a href="/dashboard/category/new-category"  class="inline-block text-white bg-blue-600 cursor-pointer hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
+     Add New Category
+   </a>
+       <div class="relative overflow-x-auto shadow-md sm:rounded-lg mt-5 mb-10">
+           <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+               <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                   <tr>
+                       <th scope="col" class="px-6 py-3">
+                           No
+                       </th>
+                       <th scope="col" class="px-6 py-3">
+                           Category Name
+                       </th>
+                       <th scope="col" class="px-6 py-3">
+                           Total Product
+                       </th>
+                       <th scope="col" class="px-6 py-3">
+                           Action
+                       </th>
+                   </tr>
+               </thead>
+               <tbody>
+               <% if ( category && category.length > 0) { %>
+                <% let i = 1; %>
+                <% category.forEach(element => {%>
+                    <tr id="category-<%= element.id %>" class="bg-white border-b hover:bg-gray-50">
+                      <th class="px-6 py-4 font-medium"><%= i++ %></th>
+                      <td class="px-6 py-4"><%= element.name %></td>
+                      <td class="px-6 py-4">-</td>
+                      <td class="px-6 py-4 text-start">
+                        <a href="/dashboard/category/edit-category/<%= element.id %>" class="text-blue-600 hover:underline me-2">Edit</a>
+                        <button class="remove-btn text-red-600 hover:underline cursor-pointer" data-id="<%= element.id %>">Remove</button>
+                      </td>
+                    </tr>
+                <%}); %>
+                <%}%>
+             </tbody>
+           </table>
+       </div> 
+     <%- include("../components/bottombar-dashboard") %>
+</div>
+
+<script>
+  const categorySelect = document.getElementById("category_id");
+const categoryModal = document.getElementById("category-modal");
+const categoryForm = document.getElementById("category-form");
+
+function toggleCategoryModal(show) {
+  if (show) {
+    categoryModal.classList.remove("hidden");
+  } else {
+    categoryModal.classList.add("hidden");
+    categoryForm.reset();
+    categorySelect.value = ""; // reset pilihan jika batal
+  }
+}
+
+categorySelect.addEventListener("change", () => {
+  if (categorySelect.value === "new") {
+    toggleCategoryModal(true);
+  }
+});
+
+categoryForm.addEventListener("submit", (e) => {
+  e.preventDefault();
+  const newCategoryName = document.getElementById("new_category_name").value.trim();
+  if (!newCategoryName) return alert("Nama kategori tidak boleh kosong");
+
+  // Contoh: kirim data ke backend untuk simpan kategori baru
+  fetch("/dashboard/product-list/add-category", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ name: newCategoryName }),
+  })
+    .then((res) => {
+      if (!res.ok) throw new Error("Gagal menambahkan kategori");
+      return res.json();
+    })
+    .then((data) => {
+      alert("Kategori berhasil ditambahkan!");
+      toggleCategoryModal(false);
+
+      // Tambahkan kategori baru ke dropdown
+      const option = document.createElement("option");
+      option.value = data.id; // pastikan backend mengembalikan ID kategori baru
+      option.textContent = data.name;
+      // Insert sebelum opsi "Tambah Kategori Baru"
+      categorySelect.insertBefore(option, categorySelect.querySelector('option[value="new"]'));
+      categorySelect.value = data.id; // langsung pilih kategori baru
+    })
+    .catch((err) => alert(err.message));
+});
+
+</script>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const buttons = document.querySelectorAll(".remove-btn");
+
+    buttons.forEach(btn => {
+      btn.addEventListener("click", async () => {
+        const categoryId = btn.getAttribute("data-id");
+
+        if (!confirm("Are you sure want to delete this category?")) return;
+
+        try {
+          console.log(categoryId);
+          
+          const response = await fetch(`/dashboard/category/delete?category_id=${categoryId}`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            }
+          });
+
+          if (response.ok) {
+            // Hapus baris produk di tabel
+            const row = document.getElementById(`category-${categoryId}`);
+            if (row) row.remove();
+            alert("Product deleted successfully.");
+          } else {
+            alert("Failed to delete product.");
+          }
+        } catch (error) {
+          alert("Error deleting product.");
+          console.error(error);
+        }
+      });
+    });
+  });
+</script>

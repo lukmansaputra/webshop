@@ -1,0 +1,150 @@
+<section class="max-w-6xl mx-auto pb-10 mt-5 px-4 md:px-12">
+  <%- include("./components/breadcrumb") %>
+  <div
+    class="rounded-r-xl mx-auto grid grid-cols-1 sm:grid-cols-2 gap-10 items-start"
+  >
+    <!-- Product Image -->
+    <div class="overflow-hidden h-full">
+      <!-- Product Image Carousel -->
+      <div
+        id="product-carousel"
+        class="relative w-full h-[300px] md:h-full z-0"
+      >
+        <!-- Carousel wrapper -->
+        <div class="relative w-full h-full overflow-hidden rounded-lg">
+          <% product.images.forEach((element, index) => { %>
+          <div
+            class="absolute inset-0 transition-opacity duration-700 ease-in-out <% if (index === 0) { %>opacity-100 z-20<% } else { %>opacity-0 z-10<% } %>"
+            data-carousel-item="<%= index %>"
+          >
+            <img
+              src="<%= element %>"
+              class="block w-full h-full object-cover"
+              alt="Product Image <%= index + 1 %>"
+            />
+          </div>
+          <% }); %>
+        </div>
+
+        <% if (product.images.length > 1) { %>
+        <!-- Slider indicators -->
+        <div
+          class="absolute z-30 flex -translate-x-1/2 bottom-4 left-1/2 space-x-3"
+        >
+          <% product.images.forEach((_, index) => { %>
+          <button
+            type="button"
+            class="w-3 h-3 rounded-full bg-white/50 hover:bg-white"
+            aria-label="Slide <%= index + 1 %>"
+            data-carousel-slide-to="<%= index %>"
+          ></button>
+          <% }); %>
+        </div>
+
+        <!-- Slider controls -->
+        <button
+          type="button"
+          class="absolute top-0 left-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none"
+          data-carousel-prev
+        >
+          <span
+            class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/30 group-hover:bg-white/50 group-focus:ring-4 group-focus:ring-white"
+          >
+            <svg class="w-4 h-4 text-white" fill="none" viewBox="0 0 6 10">
+              <path
+                d="M5 1 1 5l4 4"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </span>
+        </button>
+        <button
+          type="button"
+          class="absolute top-0 right-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none"
+          data-carousel-next
+        >
+          <span
+            class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/30 group-hover:bg-white/50 group-focus:ring-4 group-focus:ring-white"
+          >
+            <svg class="w-4 h-4 text-white" fill="none" viewBox="0 0 6 10">
+              <path
+                d="m1 9 4-4-4-4"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </span>
+        </button>
+        <% } %>
+      </div>
+    </div>
+
+    <!-- Product Info -->
+    <div class="space-y-6 p-5">
+      <p class="text-sm text-blue-600 font-medium">Clothing / Menswear</p>
+      <div class="md:flex-row md:items-center justify-between gap-2">
+        <h1 class="text-2xl md:text-3xl font-bold text-gray-800">
+          <%= product.name %>
+        </h1>
+        <br />
+        <span class="text-2xl font-semibold text-gray-900"
+          >Rp<%= product.price %></span
+        >
+      </div>
+      <div class="max-h-64 overflow-y-auto" id="description">
+        <%- product.description %>
+      </div>
+      <div class="flex flex-wrap items-center gap-4 border-t pt-2">
+        <a
+          href="#"
+          class="w-full mt-4 text-center bg-blue-600 text-white py-3 rounded-full font-semibold text-lg hover:bg-blue-700 transition"
+        >
+          Buy Now
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    let currentIndex = 0;
+    const slides = document.querySelectorAll("[data-carousel-item]");
+    const indicators = document.querySelectorAll("[data-carousel-slide-to]");
+
+    function showSlide(index) {
+      slides.forEach((slide, i) => {
+        slide.classList.toggle("opacity-100", i === index);
+        slide.classList.toggle("z-20", i === index);
+        slide.classList.toggle("opacity-0", i !== index);
+        slide.classList.toggle("z-10", i !== index);
+      });
+      indicators.forEach((btn, i) => {
+        btn.classList.toggle("bg-white/80", i === index);
+        btn.classList.toggle("bg-white/50", i !== index);
+      });
+      currentIndex = index;
+    }
+
+    indicators.forEach((btn, i) => {
+      btn.addEventListener("click", () => showSlide(i));
+    });
+
+    document
+      .querySelector("[data-carousel-prev]")
+      ?.addEventListener("click", () => {
+        showSlide((currentIndex - 1 + slides.length) % slides.length);
+      });
+
+    document
+      .querySelector("[data-carousel-next]")
+      ?.addEventListener("click", () => {
+        showSlide((currentIndex + 1) % slides.length);
+      });
+  });
+</script>

@@ -1,0 +1,45 @@
+/* Desktop (min 900px) */
+:root {
+  --main: #1e90ff;
+  --sec: #ffffff;
+}
+a {
+  color: grey;
+  text-decoration: none;
+}
+a:hover {
+  color: black;
+  transition: all 500ms;
+}
+
+/* .dropdown-menu {
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  display: block !important;
+  pointer-events: none;
+}
+
+.animated-dropdown {
+  opacity: 0;
+  transform: translateY(10px);
+  visibility: hidden;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.animated-dropdown {
+  opacity: 1;
+  transform: translateY(0);
+  visibility: visible;
+} */
+@media screen and (min-width: 992px) {
+  #nav-item {
+    width: 50%;
+  }
+}
+/* Desktop (min 900px) */
+@media screen and (max-width: 992px) {
+  #nav-item {
+    display: inline-block;
+  }
+}
