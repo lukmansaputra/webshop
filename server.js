@@ -4,8 +4,8 @@ const serverless = require("serverless-http");
 const expressLayouts = require("express-ejs-layouts");
 const path = require("path");
 
-const db = require("../App/database");
-const mainRouter = require("../App/routes/main");
+const db = require("./App/database");
+const mainRouter = require("./App/routes/main.js");
 
 const app = express();
 
