@@ -5,7 +5,7 @@ class Database {
   constructor() {
     this.pool = new Pool({
       connectionString: process.env.DATABASE_URL,
-      ssl: { rejectUnauthorized: false }, // Vercel needs this
+      ssl: { rejectUnauthorized: true }, // Vercel needs this
     });
 
     this.initializeTables();
