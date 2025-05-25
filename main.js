@@ -34,36 +34,36 @@ function formatSlug(slug) {
 const mainRouter = require("./App/routes/main");
 app.use("/", mainRouter);
 
-app.get("/product/:categorySlug", async (req, res) => {
-  const { categorySlug } = req.params;
+// app.get("/product/:categorySlug", async (req, res) => {
+//   const { categorySlug } = req.params;
 
-  // Ambil semua produk dari database atau array
-  const allProducts = await db.getAll();
+//   // Ambil semua produk dari database atau array
+//   const allProducts = await db.getAll();
 
-  const filteredProducts = allProducts.data.filter(
-    (product) => product.category_slug === categorySlug
-  );
-  console.log(filteredProducts);
+//   const filteredProducts = allProducts.data.filter(
+//     (product) => product.category_slug === categorySlug
+//   );
+//   console.log(filteredProducts);
 
-  res.render("product-by-category", {
-    category_name: formatSlug(categorySlug),
-    products: filteredProducts,
-    category: categorySlug,
-  });
-});
+//   res.render("product-by-category", {
+//     category_name: formatSlug(categorySlug),
+//     products: filteredProducts,
+//     category: categorySlug,
+//   });
+// });
 
-app.get("/product/overview/:slug", async (req, res) => {
-  const slug = req.params.slug;
-  const result = await db.getProductBySlug(slug);
-  console.log(result);
+// app.get("/product/overview/:slug", async (req, res) => {
+//   const slug = req.params.slug;
+//   const result = await db.getProductBySlug(slug);
+//   console.log(result);
 
-  res.render("product-overview", {
-    product: result,
-    category_name: formatSlug(result.category_name),
-  });
-});
+//   res.render("product-overview", {
+//     product: result,
+//     category_name: formatSlug(result.category_name),
+//   });
+// });
 
 // Jalankan server
-app.listen(3000, () => {
+app.listen(port, () => {
   console.log("Server jalan di http://localhost:3000");
 });
